@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseEntity, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
-
+import { UserRepository } from './user.userRepository';
 
 @Injectable()
-export class UserService extends BaseEntity {
+export class UserService {
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: UserRepository
-    )
+        private users: Repository<User>,
+    ) {}
 
 
 }
