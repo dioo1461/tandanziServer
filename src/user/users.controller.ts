@@ -3,28 +3,33 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
-    constructor(private readonly userService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        ) {}
 
     @Get()
     getAll(): Promise<User[]> {
-        return this.userService.findAll();
+        return this.usersService.findAll();
     }
 
     @Get(':id')
-    getOne(@Param() uid:number) : Promise<User> {
-        return this.userService.findOne(uid);
+    getOne(@Param() email:string) : Promise<User> {
+        return this.usersService.findOne(email);
     }
 
     @Post()
     create(@Body() userData: CreateUserDto) {
-        return this.userService.create(userData);
+        if (this.usersService.findOne(userData.email)) {
+            return null;
+        }
+        this.usersService.create(userData);
     }
 
     @Delete()
     removeOne(@Param() uid:number) {
-        return this.userService.remove(uid);
+        return this.usersService.remove(uid);
     }
 
     

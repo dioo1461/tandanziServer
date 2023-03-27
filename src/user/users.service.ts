@@ -15,14 +15,14 @@ export class UsersService {
         return this.usersRepository.find();
     }
 
-    findOne(uid: number): Promise<User | undefined> {
+    findOne(email: string): Promise<User | undefined> {
         return this.usersRepository.findOne({
             where: {
-                uid: uid
+                email: email
             }
         });
     }
-
+    
     async create(user:CreateUserDto) {
         await this.usersRepository.create(user);
     }
