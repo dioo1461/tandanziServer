@@ -7,9 +7,9 @@ import { User } from "../user/entities/user.entity";
 @Injectable()
 export class AuthService {
     constructor(
+        private jwtService: JwtService,
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        private jwtService: JwtService
     ) {}
 
     // private readonly secretkey = 'mykey';
@@ -28,7 +28,9 @@ export class AuthService {
     }
 
     async login(user: any) {
+        console.log(user);
         const payload = {email: user.email, sub: user.uid};
+        console.log(this.jwtService.sign(payload));
         return {
             access_token: this.jwtService.sign(payload),
         };

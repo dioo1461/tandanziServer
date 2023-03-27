@@ -3,8 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
 import { User } from './user/entities/user.entity';
-import { UserModule } from './user/user.module';
+import { UserController } from './user/users.controller';
+import { UserModule } from './user/users.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,6 +23,7 @@ import { UserModule } from './user/user.module';
     entities : [User],
     synchronize : true,
   }),
+  AuthModule,
   UserModule,
 ],
   controllers: [AppController],
