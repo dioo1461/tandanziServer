@@ -6,8 +6,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { User } from './user/entities/user.entity';
-import { UserController } from './user/users.controller';
-import { UserModule } from './user/users.module';
+import { UsersController } from './user/users.controller';
+import { UsersModule } from './user/users.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -24,7 +24,7 @@ import { UserModule } from './user/users.module';
     synchronize : true,
   }),
   AuthModule,
-  UserModule,
+  UsersModule,
 ],
   controllers: [AppController],
   providers: [AppService],
