@@ -14,14 +14,16 @@ export class UsersController {
         return this.usersService.findAll();
     }
 
-    @Get(':id')
+    @Get(':email')
     getOne(@Param() email:string) : Promise<User> {
-        return this.usersService.findOne(email);
+        return this.usersService.findOneByEmail(email);
     }
+
+
 
     @Post()
     create(@Body() userData: CreateUserDto) {
-        if (this.usersService.findOne(userData.email)) {
+        if (this.usersService.findOneByEmail(userData.email)) {
             return null;
         }
         this.usersService.create(userData);

@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
+import { ComparePassword } from "./bcrypt-password";
 
 @Injectable()
 export class AuthService {
@@ -20,11 +21,25 @@ export class AuthService {
                 email : email,
             }
         })
-        if (user && user.password === pass) {
-            const { password, ...result } = user;
-            return result;
+        // 여기서부터 수정된 코드
+        if (user) {
+            ComparePassword(user.password, pass)
+            .then(res=>{
+                if (res) {
+                    const { password, ...result } = user;
+                    return result;
+                }
+            })
+            .catch(err=>{});
+            return null;
         }
-        return null;
+
+        // if (user && user.password === pass) {
+            
+        //     const { password, ...result } = user;
+        //     return result;
+        // }
+        // return null;
     }
 
     async login(user: any) {
