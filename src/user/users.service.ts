@@ -27,8 +27,8 @@ export class UsersService {
         await this.usersRepository.create(user);
     }
 
-    async remove(uid:number) {
-        await this.usersRepository.delete({uid:uid});
+    async remove(email:string) {
+        await this.usersRepository.delete({email:email});
     }
     // async findOne(username: string): Promise<User | undefined> {
     //     return this.users.find(user => user.username === username);

@@ -15,11 +15,9 @@ export class UsersController {
     }
 
     @Get(':email')
-    getOne(@Param() email:string) : Promise<User> {
+    getOne(@Param('email') email:string) : Promise<User | undefined> {
         return this.usersService.findOneByEmail(email);
     }
-
-
 
     @Post()
     create(@Body() userData: CreateUserDto) {
@@ -27,11 +25,12 @@ export class UsersController {
             return null;
         }
         this.usersService.create(userData);
+        console.log("created");
     }
 
     @Delete()
-    removeOne(@Param() uid:number) {
-        return this.usersService.remove(uid);
+    removeOne(@Param() email:string) {
+        return this.usersService.remove(email);
     }
 
     
