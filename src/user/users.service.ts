@@ -34,18 +34,22 @@ export class UsersService {
     
     async create(user:CreateUserDto) {
         const {password: pass, ...rest} = user;
-        await EncryptPassword(pass)
+        return await EncryptPassword(pass)
         .then(res => {
             const crypted = res;
             const newUser = {
                 password: crypted,
                 ...rest
             }
-            this.usersRepository.save(newUser);
+            return this.usersRepository.save(newUser)
         })
-        
-
-        
+        .then(()=>{
+            console.log('user.service.create(), return true');
+            return true;
+        })
+        .catch((err)=>{
+            throw err;
+        });
     }
 
     async remove(email:string) {

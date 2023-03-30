@@ -22,26 +22,26 @@ export class AuthService {
             }
         });
         // 여기서부터 수정된 코드
-        // console.log('auth.service-user:', user);
-        // console.log('auth.service-email & pw:', email, pass);
+        console.log('auth.service.validateUser(), user:', user);
+        console.log('auth.service.validateUser(), email & pw:', email, pass);
         if (user) {
             const res = await ComparePassword(pass, user.password);
-            // console.log('auth.service-then');
-            // console.log('auth.service-res:', res);
+            console.log('auth.service.validateUser().ComparePassword().then, res:', res);
             if (res) {
                 const { password, ...rest } = user;
-                // console.log('auth.service-rest:', rest);
+                console.log('auth.service.validateUser().res=true, return rest:', rest);
                 return rest;
             } else {
+                console.log('auth.service.validateUser().res=true, return null');
                 return null;
             }
         };
     }
 
-    async login(user: any) {
-        console.log('login-user:', user);
+    async issueJwt(user: any) {
+        console.log('auth.service.issueJwt(), user:', user);
         const payload = {email: user.email, sub: user.uid};
-        console.log('payload:', this.jwtService.sign(payload));
+        console.log('auth.service.issueJwt(), return payload:', this.jwtService.sign(payload));
         return {
             access_token: this.jwtService.sign(payload),
         };

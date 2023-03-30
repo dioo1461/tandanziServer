@@ -20,8 +20,9 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    console.log('app.controller-auth/login request received');
-    return this.authService.login(req.user);
+    console.log('### app.controller-auth/login request received');
+    // console.log('app.controller, req: ', req);
+    return this.authService.issueJwt(req.user);
   }
 
   @UseGuards(JwtAuthGuard)

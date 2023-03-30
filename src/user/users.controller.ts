@@ -13,8 +13,8 @@ export class UsersController {
 
     @Get()
     getOne(@Query('email') email: string, @Query('username') username: string): Promise<User | undefined> {
-        console.log("email or username get request received");
-        console.log(email, username);
+        console.log("### usercontroller email or username get request received");
+        console.log('email:' , email, 'username:', username);
         if (email !== undefined && username !== undefined) {
             return this.usersService.findOneByEmail(email);
         }
@@ -30,31 +30,35 @@ export class UsersController {
 
     @Get()
     getAll(): Promise<User[]> {
-        console.log('getall request received');
+        console.log('### user getall request received');
         return this.usersService.findAll();
     }
 
     @Post()
-    create(@Body() userData: CreateUserDto) {
-        console.log("user create request received");
-        this.usersService.findOneByEmail(userData.email)
+    async create(@Body() userData: CreateUserDto) {
+        console.log("### user create request received");
+        return await this.usersService.findOneByEmail(userData.email)
         .then(res => {
             if (res) {
-                console.log('email already exists');
+                console.log('### email already exists, creation failed');
                 return false;
             } else {
-                this.usersService.create(userData);
-                console.log("user created");
-                return true;
+                return this.usersService.create(userData);
             }
         })
-        .catch(err => {})
+        .then(()=>{
+            console.log('### user created');
+            return true;
+        })
+        .catch(err => {
+            throw err;
+        })
         
     }
 
     @Delete()
     removeOne(@Param() email: string) {
-        console.log("user delete request received");
+        console.log("### user delete request received");
         return this.usersService.remove(email);
     }
 
