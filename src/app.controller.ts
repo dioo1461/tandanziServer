@@ -17,11 +17,10 @@ export class AppController {
     return this.appService.getHello();
   }
 
-    
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    console.log('auth/login request received');
+    console.log('app.controller-auth/login request received');
     return this.authService.login(req.user);
   }
 

@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
-import { ComparePassword } from "./bcrypt-password";
+import { ComparePassword } from "../bcrypt/bcrypt-password";
 
 @Injectable()
 export class AuthService {
@@ -18,34 +18,30 @@ export class AuthService {
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.userRepository.findOne({
             where: {
-                email : email,
+                email: email,
             }
-        })
+        });
         // 여기서부터 수정된 코드
+        // console.log('auth.service-user:', user);
+        // console.log('auth.service-email & pw:', email, pass);
         if (user) {
-            ComparePassword(user.password, pass)
-            .then(res=>{
-                if (res) {
-                    const { password, ...result } = user;
-                    return result;
-                }
-            })
-            .catch(err=>{});
-            return null;
-        }
-
-        // if (user && user.password === pass) {
-            
-        //     const { password, ...result } = user;
-        //     return result;
-        // }
-        // return null;
+            const res = await ComparePassword(pass, user.password);
+            // console.log('auth.service-then');
+            // console.log('auth.service-res:', res);
+            if (res) {
+                const { password, ...rest } = user;
+                // console.log('auth.service-rest:', rest);
+                return rest;
+            } else {
+                return null;
+            }
+        };
     }
 
     async login(user: any) {
-        console.log(user);
+        console.log('login-user:', user);
         const payload = {email: user.email, sub: user.uid};
-        console.log(this.jwtService.sign(payload));
+        console.log('payload:', this.jwtService.sign(payload));
         return {
             access_token: this.jwtService.sign(payload),
         };
