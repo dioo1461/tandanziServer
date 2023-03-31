@@ -3,13 +3,15 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { QueryResult } from 'typeorm';
+import { UseGuards } from '@nestjs/common/decorators';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Request } from '@nestjs/common/decorators';
 
 @Controller('users')
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
     ) { }
-
 
     @Get()
     getOne(@Query('email') email: string, @Query('username') username: string): Promise<User | undefined> {
@@ -25,8 +27,6 @@ export class UsersController {
             return this.usersService.findOneByUsername(username);
         }
     }
-
-    
 
     @Get()
     getAll(): Promise<User[]> {
@@ -62,6 +62,10 @@ export class UsersController {
         return this.usersService.remove(email);
     }
 
-
+    @UseGuards(JwtAuthGuard)
+    @Get('profile')
+    getProfile(@Request() req) {
+        return req.user;
+    }
 
 }

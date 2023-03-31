@@ -46,4 +46,13 @@ export class AuthService {
             access_token: this.jwtService.sign(payload),
         };
     }
+
+    async decodeJwt(token: string) {
+        console.timeLog('auth.service.decodeJwt(), token:', token);
+        const decoded = this.jwtService.decode(token);
+        if (decoded) {
+            return decoded;
+        }
+        return null;
+    }
 }

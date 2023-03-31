@@ -9,6 +9,7 @@ import { JwtStrategy } from "./jwt.strategy";
 import { Repository } from "typeorm";
 import { User } from "src/user/entities/user.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AuthController } from "./auth.controller";
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
             signOptions: {expiresIn: '2h'},
         }),
     ],
+    controllers: [AuthController],
     providers: [AuthService, LocalStrategy, JwtStrategy,],
     exports: [AuthService],
 })
