@@ -48,7 +48,7 @@ export class AuthService {
     }
 
     async decodeJwt(token: string) {
-        console.timeLog('auth.service.decodeJwt(), token:', token);
+        console.log('auth.service.decodeJwt(), token:', token);
         const decoded = this.jwtService.decode(token);
         if (decoded) {
             return decoded;
