@@ -2,7 +2,6 @@ import { Body, Controller, Get, Param, Post, Delete, Query } from '@nestjs/commo
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { QueryResult } from 'typeorm';
 import { UseGuards } from '@nestjs/common/decorators';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from '@nestjs/common/decorators';
@@ -14,7 +13,7 @@ export class UsersController {
     ) { }
 
     @Get()
-    getOne(@Query('email') email: string, @Query('username') username: string): Promise<User | undefined> {
+    async getOne(@Query('email') email: string, @Query('username') username: string): Promise<Object | undefined> {
         console.log("### usercontroller email or username get request received");
         console.log('email:' , email, 'username:', username);
         if (email !== undefined && username !== undefined) {

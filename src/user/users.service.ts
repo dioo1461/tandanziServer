@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EncryptPassword } from 'src/bcrypt/bcrypt-password';
+import { AuthService } from 'src/auth/auth.service';
+import { EncryptPassword } from 'src/common/utils/bcrypt-password';
 import { BaseEntity, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
@@ -10,50 +12,62 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
-    ) {}
+        private authService: AuthService,
+    ) { }
 
     findAll(): Promise<User[]> {
         return this.usersRepository.find();
     }
 
-    findOneByEmail(email: string): Promise<User | undefined> {
-        return this.usersRepository.findOne({
+    async findOneByEmail(email: string): Promise<Object | undefined> {
+        const user = await this.usersRepository.findOne({
             where: {
-                email: email
+                email: email,
             }
         });
+        if (user) {
+            const { password, ...rest } = user;
+            return rest;
+        }
+        return null;
     }
 
-    findOneByUsername(username: string): Promise<User | undefined> {
-        return this.usersRepository.findOne({
+    async findOneByUsername(username: string): Promise<Object | undefined> {
+        const user = await this.usersRepository.findOne({
             where: {
-                username: username
+                username: username,
             }
         });
+        if (user) {
+            const { password, ...rest } = user;
+            return rest;
+        }
+        return null;
     }
-    
-    async create(user:CreateUserDto) {
-        const {password: pass, ...rest} = user;
+
+
+    async create(user: CreateUserDto) {
+        const { password: pass, ...rest } = user;
         return await EncryptPassword(pass)
-        .then(res => {
-            const crypted = res;
-            const newUser = {
-                password: crypted,
-                ...rest
-            }
-            return this.usersRepository.save(newUser)
-        })
-        .then(()=>{
-            console.log('user.service.create(), return true');
-            return true;
-        })
-        .catch((err)=>{
-            throw err;
-        });
+            .then(res => {
+                const crypted = res;
+                const newUser = {
+                    password: crypted,
+                    ...rest
+                }
+                return this.usersRepository.save(newUser)
+            })
+            .then(() => {
+                console.log('user.service.create(), return true');
+                return true;
+            })
+            .catch((err) => {
+                throw err;
+            });
     }
 
-    async remove(email:string) {
-        await this.usersRepository.delete({email:email});
+    async remove(email: string) {
+        await this.usersRepository.delete({ email: email });
     }
     // async findOne(username: string): Promise<User | undefined> {
     //     return this.users.find(user => user.username === username);
