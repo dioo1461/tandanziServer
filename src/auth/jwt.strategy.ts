@@ -3,10 +3,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { jwtConstants } from '@/auth/constants';
 import { AuthService } from '@/auth/auth.service';
+import { UsersService } from '@/user/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly usersService: UsersService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Authorization: bearer ${token} 표준방식 사용
       ignoreExpiration: false, // 만료시 401 에러 응답
@@ -15,9 +18,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    try{
-      const user = await this.authService.validateUser
+    try {
+      const user = await this.usersService.findOneByEmail(payload.email);
+      if (user) {
+        return user;
+      }
+      return null;
+    } 
+    catch (err) {
+      throw err;
     }
-    return { email: payload.email, uid: payload.sub };
   }
 }

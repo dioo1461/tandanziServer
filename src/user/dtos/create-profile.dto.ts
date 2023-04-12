@@ -12,14 +12,7 @@ export class CreateProfileDto {
     @IsOptional()
     @IsNumber()
     readonly weight: number | null;
-
-    @IsOptional()
-    @IsObject()
-    readonly Inbody: InbodyDto | null;
-
-}
-
-class InbodyDto {
+    
     @IsOptional()
     @IsNumber()
     readonly bodyWater: number | null;
@@ -39,4 +32,5 @@ class InbodyDto {
     @IsOptional()
     @IsNumber()
     readonly waistHipRatio: number | null;
+
 }

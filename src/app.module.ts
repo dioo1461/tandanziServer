@@ -8,6 +8,8 @@ import { AuthService } from '@/auth/auth.service';
 import { User } from '@/user/entities/user.entity';
 import { UsersController } from '@/user/users/users.controller';
 import { UsersModule } from '@/user/users/users.module';
+import { ProfilesModule } from '@/user/profiles/profiles.module';
+import { Profile } from '@/user/entities/profile.entity';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,11 +22,12 @@ import { UsersModule } from '@/user/users/users.module';
     username : process.env.DB_USER,
     password : process.env.DB_PASS,
     database : process.env.DB_DATABASE,
-    entities : [User],
+    entities : [User, Profile],
     synchronize : true,
   }),
   AuthModule,
   UsersModule,
+  ProfilesModule,
 ],
   controllers: [AppController],
   providers: [AppService],

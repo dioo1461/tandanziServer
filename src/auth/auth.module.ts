@@ -10,6 +10,7 @@ import { Repository } from "typeorm";
 import { User } from "@/user/entities/user.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthController } from "@/auth/auth.controller";
+import { UsersService } from "@/user/users/users.service";
 
 @Module({
     imports: [
@@ -21,7 +22,7 @@ import { AuthController } from "@/auth/auth.controller";
         }),
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy,],
+    providers: [AuthService, LocalStrategy, JwtStrategy, UsersService],
     exports: [AuthService],
 })
 export class AuthModule {}

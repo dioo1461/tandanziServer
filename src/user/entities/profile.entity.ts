@@ -5,13 +5,28 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class Profile{
     @PrimaryGeneratedColumn()
     uid: number;
+    
+    @Column()
+    readonly age: number | null;
 
     @Column()
-    email: string;
+    readonly height: number | null;
 
     @Column()
-    password: string;
+    readonly weight: number | null;
 
     @Column()
-    username: string;
+    readonly bodyWater: number | null;
+
+    @Column()
+    readonly bodyProtein: number | null;
+
+    @Column()
+    readonly bodyMineral: number | null;
+    
+    @Column()
+    readonly bodyFat: number | null;
+
+    @Column()
+    readonly waistHipRatio: number | null;
 }

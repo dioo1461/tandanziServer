@@ -1,3 +1,4 @@
+import { CreateProfileDto } from '@/user/dtos/create-profile.dto';
 import { Profile } from '@/user/entities/profile.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,4 +24,14 @@ export class ProfilesService {
         return null;
     }
 
+
+    async create(uid: number, profile: CreateProfileDto): Promise<number | void> {
+        this.profileRepository.save({uid, ...profile})
+        .then(res => {
+            return uid;
+        })
+        .catch(err => {
+            throw err;
+        })
+    }
 }
