@@ -3,30 +3,30 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Profile{
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({type: 'int'})
     uid: number;
     
-    @Column()
+    @Column({type: 'int'})
     readonly age: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly height: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly weight: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly bodyWater: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly bodyProtein: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly bodyMineral: number | null;
     
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly bodyFat: number | null;
 
-    @Column()
+    @Column({type: 'decimal', precision:5, scale: 2})
     readonly waistHipRatio: number | null;
 }

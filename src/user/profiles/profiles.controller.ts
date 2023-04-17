@@ -2,7 +2,7 @@ import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
 import { CreateProfileDto } from '@/user/dtos/create-profile.dto';
 import { Profile } from '@/user/entities/profile.entity';
 import { ProfilesService } from '@/user/profiles/profiles.service';
-import {Controller, Get, Req, Post, Body} from '@nestjs/common';
+import {Controller, Get, Req, Post, Body, Param} from '@nestjs/common';
 import {UseGuards} from '@nestjs/common/decorators';
 import { Request } from 'express';
 
@@ -13,15 +13,22 @@ export class ProfilesController {
     ) {}
 
     @UseGuards(JwtAuthGuard)
-    @Get()
-    async getOne(@Req() req: Request) : Promise<Profile | undefined> {
+    @Get('my')
+    async getMine(@Req() req: Request) : Promise<Profile | undefined> {
         const uid = req.user.uid;
         
-        console.log("### profilesController get request received");
+        console.log("### profilesController getMine request received");
         console.log('req.user: ', req.user);
-        return this.profilesService.findOneByUid(uid);
+        return await this.profilesService.findOneByUid(uid);
 
         //return this.profilesService.findOneByUid();
+    }
+
+    @Get(':uid')
+    @Get()
+    async getOne(@Param('uid') uid: number) {
+        console.log("### profilesController getOne request received");
+        return await this.profilesService.findOneByUid(uid);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -32,7 +39,7 @@ export class ProfilesController {
         console.log("### profilesController create request received");
         console.log('req.user: ', req.user);
 
-        return this.profilesService.create(uid, profileData);
+        return await this.profilesService.create(uid, profileData);
     }
 
 

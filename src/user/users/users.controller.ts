@@ -1,17 +1,17 @@
-import { Body, Controller, Get, Param, Post, Delete, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Delete, Query, Req } from '@nestjs/common';
 import { CreateUserDto } from '@/user/dtos/create-user.dto';
 import { UsersService } from '@/user/users/users.service';
 import { User } from '@/user/entities/user.entity';
 import { UseGuards } from '@nestjs/common/decorators';
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
-import { Request } from '@nestjs/common/decorators';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
     ) { }
-
+    
     @Get()
     async getOne(@Query('email') email: string, @Query('username') username: string): Promise<Object | undefined> {
         console.log("### usercontroller email or username get request received");
@@ -26,6 +26,15 @@ export class UsersController {
             return this.usersService.findOneByUsername(username);
         }
     }
+
+    @Get('/my')
+    @UseGuards(JwtAuthGuard)
+    async getOneByJwt(@Req() req: Request) : Promise<Object | undefined> {
+        console.log('### usercontroller jwt get request received');
+        console.log('req.user: ', req.user);
+        return this.usersService.findOneByEmail(req.user.email);
+    }
+
 
     @Get()
     getAll(): Promise<User[]> {
@@ -59,12 +68,6 @@ export class UsersController {
     removeOne(@Param() email: string) {
         console.log("### user delete request received");
         return this.usersService.remove(email);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
     }
 
 }

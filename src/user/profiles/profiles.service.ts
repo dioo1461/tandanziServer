@@ -19,6 +19,7 @@ export class ProfilesService {
             }
         });
         if (profile) {
+            console.log('profiles.service.findOneByUid return profile: ', profile);
             return profile;
         }
         return null;

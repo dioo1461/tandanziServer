@@ -22,7 +22,7 @@ import { Profile } from '@/user/entities/profile.entity';
     username : process.env.DB_USER,
     password : process.env.DB_PASS,
     database : process.env.DB_DATABASE,
-    entities : [User, Profile],
+    entities : [User, Profile], // db 테이블(엔티티) 추가되면 여기도 추가해주기
     synchronize : true,
   }),
   AuthModule,
