@@ -18,7 +18,7 @@ export class UsersService {
         return this.usersRepository.find();
     }
 
-    async findOneByEmail(email: string): Promise<{uid: number, email: string, username: string} | undefined> {
+    async findOneByEmail(email: string): Promise<{ uid: number, email: string, username: string } | undefined> {
         const user = await this.usersRepository.findOne({
             where: {
                 email: email,
@@ -31,7 +31,7 @@ export class UsersService {
         return null;
     }
 
-    async findOneByUsername(username: string): Promise<{uid: number, email: string, username: string} | undefined> {
+    async findOneByUsername(username: string): Promise<{ uid: number, email: string, username: string } | undefined> {
         const user = await this.usersRepository.findOne({
             where: {
                 username: username,
@@ -45,7 +45,7 @@ export class UsersService {
     }
 
 
-    async create(user: CreateUserDto) : Promise<boolean | void> {
+    async create(user: CreateUserDto): Promise<boolean | void> {
         const { password: pass, ...rest } = user;
         return await EncryptPassword(pass)
             .then(res => {
@@ -65,7 +65,11 @@ export class UsersService {
             });
     }
 
-    async remove(email: string) {
+    async updateOneByEmail(email: string, user: object): Promise<boolean | void> {
+        await this.usersRepository.update({email: email}, user);
+    }
+
+    async removeOneByEmail(email: string) {
         await this.usersRepository.delete({ email: email });
     }
     // async findOne(username: string): Promise<User | undefined> {

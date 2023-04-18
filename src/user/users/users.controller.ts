@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Delete, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Delete, Query, Req, Patch } from '@nestjs/common';
 import { CreateUserDto } from '@/user/dtos/create-user.dto';
 import { UsersService } from '@/user/users/users.service';
 import { User } from '@/user/entities/user.entity';
@@ -64,7 +64,12 @@ export class UsersController {
         
     }
 
+    @Patch()
+    @UseGuards(JwtAuthGuard)
+    updateOne()
+
     @Delete()
+    @UseGuards(JwtAuthGuard)
     removeOne(@Param() email: string) {
         console.log("### user delete request received");
         return this.usersService.remove(email);
