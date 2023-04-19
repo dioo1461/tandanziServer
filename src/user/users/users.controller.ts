@@ -66,13 +66,15 @@ export class UsersController {
 
     @Patch()
     @UseGuards(JwtAuthGuard)
-    updateOne()
+    updateOne(){
+        
+    }
 
     @Delete()
     @UseGuards(JwtAuthGuard)
     removeOne(@Param() email: string) {
         console.log("### user delete request received");
-        return this.usersService.remove(email);
+        return this.usersService.removeOneByEmail(email);
     }
 
 }
