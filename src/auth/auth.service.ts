@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "@/user/entities/user.entity";
-import { ComparePassword } from "@/common/utils/bcrypt-password";
+import { comparePassword } from "@/common/utils/bcrypt-password";
 
 @Injectable()
 export class AuthService {
@@ -25,7 +25,7 @@ export class AuthService {
         console.log('auth.service.validateUser(), user:', user);
         console.log('auth.service.validateUser(), email & pw:', email, pass);
         if (user) {
-            const res = await ComparePassword(pass, user.password);
+            const res = await comparePassword(pass, user.password);
             console.log('auth.service.validateUser().ComparePassword().then, res:', res);
             if (res) {
                 const { password, ...rest } = user;
@@ -54,5 +54,24 @@ export class AuthService {
             return decoded;
         }
         return null;
+    }
+
+    async comparePassword(email: string, password: string) {
+        console.log('auth.service.comparePassword()');
+        const user = await this.userRepository.findOne({
+            where: {
+                email: email
+            }
+        });
+
+        if (!user) {
+            console.log('auth.service.comparePassword(): user is undefined');
+            return false;
+        }
+        const origin = user.password;
+        console.log('pass: ', password, 'origin: ', origin);
+        const res = await comparePassword(password, origin);
+        console.log('comparePassword() res:', res);
+        return res;
     }
 }

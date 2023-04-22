@@ -21,8 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     try {
       const user = await this.usersService.findOneByEmail(payload.email);
       if (user) {
+        console.log('jwt.strategy.validate() user found, user.email: ', user.email);
         return user;
       }
+      console.log('jwt.strategy.validate() user not found');
       return null;
     } 
     catch (err) {

@@ -66,15 +66,18 @@ export class UsersController {
 
     @Patch()
     @UseGuards(JwtAuthGuard)
-    updateOne(){
-        
+    updateOne(@Req() req: Request, @Body() data: object){
+        console.log("### user Auth update request received");
+        return this.usersService.updateOneByEmail(req.user.email, data);
     }
 
+
+    // 추후 보안 강화
     @Delete()
     @UseGuards(JwtAuthGuard)
-    removeOne(@Param() email: string) {
+    removeOne(@Req() req: Request) {
         console.log("### user delete request received");
-        return this.usersService.removeOneByEmail(email);
+        return this.usersService.removeOneByEmail(req.user.email);
     }
 
 }
