@@ -41,7 +41,8 @@ export class AuthService {
     async issueJwt(user: any) {
         console.log('auth.service.issueJwt(), user:', user);
         const payload = {email: user.email, sub: user.uid};
-        console.log('auth.service.issueJwt(), return payload:', this.jwtService.sign(payload));
+        console.log('auth.service.issueJwt(), origin payload:', {email: user.email, sub: user.uid});
+        console.log('auth.service.issueJwt(), returning payload:', this.jwtService.sign(payload));
         return {
             access_token: this.jwtService.sign(payload),
         };

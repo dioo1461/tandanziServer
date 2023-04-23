@@ -65,8 +65,25 @@ export class UsersService {
             });
     }
 
-    async updateOneByEmail(email: string, user: object): Promise<boolean | void> {
-        await this.usersRepository.update({email: email}, user);
+    async updateOneByEmail(email: string, user: {email?: string, username?: string, password?: string}): Promise<boolean | void> {
+        let data = user; // user가 객체일 경우, 참조에 의한 전달을 하기 때문에 side effect를 방지하기 위해 let으로 새로 변수 생성
+        if (data.password) {
+            const { password: pass, ...rest } = data;
+            data = await EncryptPassword(pass)
+            .then(res => {
+                console.log('users.service.updateOneByEmail() password encryption successed');
+                const crypted = res;
+                return {
+                    password: crypted,
+                    ...rest
+                }
+            })
+            .catch((err) => {
+                console.log('users.service.updateOneByEmail() password encryption failed');
+                throw err;
+            });
+        }
+        await this.usersRepository.update({email: email}, data);
     }
 
     async removeOneByEmail(email: string) {

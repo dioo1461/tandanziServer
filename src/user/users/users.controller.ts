@@ -66,7 +66,7 @@ export class UsersController {
 
     @Patch()
     @UseGuards(JwtAuthGuard)
-    updateOne(@Req() req: Request, @Body() data: object){
+    updateOne(@Req() req: Request, @Body() data: {email?: string, username?: string, password?: string}){
         console.log("### user Auth update request received");
         return this.usersService.updateOneByEmail(req.user.email, data);
     }
