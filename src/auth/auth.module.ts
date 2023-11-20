@@ -3,7 +3,7 @@ import { UsersModule } from "@/user/users/users.module";
 import { AuthService } from "@/auth/auth.service";
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from "@/auth/constants";
+import { jwtConstants } from "@/secrets/constants";
 import { LocalStrategy } from "@/auth/local.strategy";
 import { JwtStrategy } from "@/auth/jwt.strategy";
 import { Repository } from "typeorm";
